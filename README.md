@@ -19,9 +19,9 @@ cd backend
 pip install -r requirements.txt
 ```
 ### Start the backend
-To start the backend navigate to the backend folder and run the following command.
+To start the backend run the following command.
 ```bash
-uvicorn main:app --reload
+uvicorn backend.main:app --reload
 ```
 
 ## Frontend
