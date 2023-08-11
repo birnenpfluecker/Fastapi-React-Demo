@@ -5,11 +5,19 @@ from fastapi import FastAPI, Depends, HTTPException
 
 from backend import models, crud, schemas
 from backend.database import SessionLocal, engine
+from backend.import_data import import_data
 from backend.schemas import Employee
 
 models.Base.metadata.create_all(bind=engine)
-print(sys.path)
 app = FastAPI()
+
+"""check if db contains data, if not, add some data"""
+db_session = SessionLocal()
+if not db_session.query(models.Employee).first() and not db_session.query(
+        models.Department).first() and not db_session.query(
+    models.Project).first():
+    import_data()
+db_session.close()
 
 
 # Dependency
