@@ -2,6 +2,7 @@ import sys
 from typing import List
 
 from fastapi import FastAPI, Depends, HTTPException
+from starlette.middleware.cors import CORSMiddleware
 
 from backend import models, crud, schemas
 from backend.database import SessionLocal, engine
@@ -10,6 +11,20 @@ from backend.schemas import Employee
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+
+#adding middleware to allow CORS
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 """check if db contains data, if not, add some data"""
 db_session = SessionLocal()

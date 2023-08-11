@@ -1,0 +1,13 @@
+#root {
+  display: flex;
+  flex-direction: column; /* Arrange child elements vertically */
+  justify-content: flex-start; /* Horizontally, this won't matter for column direction */
+  width: 100%;
+  height: 100vh; /* Assuming you want it to take the full viewport height */
+  margin: 0 auto;
+  text-align: center;
+}
+
+.read-the-docs {
+  color: #888;
+}

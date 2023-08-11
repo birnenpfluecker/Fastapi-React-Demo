@@ -23,8 +23,21 @@ To start the backend run the following command.
 ```bash
 uvicorn backend.main:app --reload
 ```
+The backend is now running on http://127.0.0.1:8000. You can access the documentation of the API on http://127.0.0.1:8000/docs. If you have other applications running on port 8000 you can change the port by adding the parameter `--port <port>` to the command. For example `uvicorn backend.main:app --reload --port 8001` starts the backend on port 8001.
+
+#### Data Import
+The backend automatically imports the data from the given *.csv files on the first start. If you want to import the data again you can delete the database file `PxC_demo_backend.db` and restart the backend, note that this will delete all changes to the data you made previously. 
+
 
 ## Frontend
-TODO
 
+Check that the backend is running and then run the following commands to start the frontend.
+```bash
 
+cd frontend
+npm run dev
+```
+
+## Possible Problems
+<span style="color:red">  Important:</span> The frontend is configured to use the backend on http://127.0.0.1:8000. If you have the backend running on a different port you have to change the port in the file `frontend/src/config.tsx` to the port you are using.</br>
+<span style="color:red">  Important:</span> The backend is configured to allow CORS requests from http://127.0.0.1:3000 and http://127.0.0.1:5173. If you have the frontend running on a different port you have to change the port in the file `backend/main.py` to the port you are using.
