@@ -1,9 +1,11 @@
 import sys
+from typing import List
 
 from fastapi import FastAPI, Depends, HTTPException
 
 from backend import models, crud, schemas
 from backend.database import SessionLocal, engine
+from backend.schemas import Employee
 
 models.Base.metadata.create_all(bind=engine)
 print(sys.path)
@@ -22,6 +24,9 @@ def get_db():
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+"""HTTP methods for the employees"""
 
 
 @app.get("/employees/", response_model=list[schemas.Employee], status_code=200)
@@ -61,6 +66,9 @@ def delete_employee(user_mail: str, db=Depends(get_db)):
     crud.delete_employee(db=db, user_mail=user_mail)
 
 
+"""HTTP methods for the departments"""
+
+
 @app.get("/departments/", response_model=list[schemas.Department], status_code=200)
 def read_departments(skip: int = 0, limit: int = 100, db=Depends(get_db)):
     return crud.get_departments(db, skip=skip, limit=limit)
@@ -74,7 +82,7 @@ def get_department(department_id: int, db=Depends(get_db)) -> schemas.Department
     return department
 
 
-@app.post("/departments/", response_model=schemas.Department,status_code=201)
+@app.post("/departments/", response_model=schemas.Department, status_code=201)
 def create_department(department: schemas.DepartmentCreate, db=Depends(get_db)):
     db_department = crud.get_department_by_name(db, department_name=department.name)
     if db_department:
@@ -96,6 +104,9 @@ def delete_department(department_id: int, db=Depends(get_db)):
     if db_department is None:
         raise HTTPException(status_code=404, detail="Department not found")
     crud.delete_department(db=db, department_id=department_id)
+
+
+"""HTTP methods for the projects"""
 
 
 @app.get("/projects/", response_model=list[schemas.Project], status_code=200)
@@ -133,3 +144,36 @@ def delete_project(project_id: int, db=Depends(get_db)):
     if db_project is None:
         raise HTTPException(status_code=404, detail="Project not found")
     crud.delete_project(db=db, project_id=project_id)
+
+
+"""HTTP methods for statistics"""
+
+
+@app.get("/statistics/average_age_per_department", status_code=200)
+def get_average_age_per_department(db=Depends(get_db)) -> list[tuple[str, float]]:
+    departments = crud.get_departments(db)
+    departments_with_average_age = []
+    for department in departments:
+        average_age = crud.get_average_age_of_department(db, department_id=department.id)
+        departments_with_average_age.append((department.name, average_age))
+    return departments_with_average_age
+
+
+@app.get("/statistics/employees_per_department", status_code=200)
+def get_employees_per_department(db=Depends(get_db)) -> list[tuple[str, List[Employee]]]:
+    departments = crud.get_departments(db)
+    departments_with_employees = []
+    for department in departments:
+        print(type(department.employees))
+        departments_with_employees.append((department.name, department.employees))
+    return departments_with_employees
+
+
+@app.get("/statistics/number_of_projects_per_department", status_code=200)
+def get_number_of_projects_per_department(db=Depends(get_db)) -> list[tuple[str, int]]:
+    departments = crud.get_departments(db)
+    departments_with_number_of_projects = []
+    for department in departments:
+        number_of_projects = crud.get_number_of_projects_of_department(db, department_id=department.id)
+        departments_with_number_of_projects.append((department.name, number_of_projects))
+    return departments_with_number_of_projects

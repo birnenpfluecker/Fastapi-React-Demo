@@ -69,6 +69,24 @@ def get_departments(db: Session, skip: int = 0, limit: int = 100) -> List[Depart
     return db.query(Department).offset(skip).limit(limit).all()
 
 
+def get_average_age_of_department(db: Session, department_id: int) -> float:
+    """Returns the average age of the employees in the department, if the department has no employees, it returns 0"""
+    db_department = db.query(Department).filter(Department.id == department_id).first()
+    if db_department.employees is None or len(db_department.employees) == 0:
+        return 0
+    sum_of_ages = 0
+    for employee in db_department.employees:
+        sum_of_ages += employee.age
+    return sum_of_ages / len(db_department.employees)
+
+
+def get_number_of_projects_of_department(db: Session, department_id: int) -> int:
+    """Returns the number of projects of the department"""
+    db_department = db.query(Department).filter(Department.id == department_id).first()
+    if db_department.projects is None:
+        return 0
+    return len(db_department.projects)
+
 def update_department(db: Session, department_id: int, department: schemas.Department) -> Department:
     print(str(department) + "\n" + str(department_id) + "\n")
     db_department = db.query(Department).filter(Department.id == department_id).first()
@@ -107,6 +125,10 @@ def create_project(db: Session, project: schemas.ProjectCreate) -> Project:
 
 def get_project(db: Session, project_id: int) -> Project:
     return db.query(Project).filter(Project.id == project_id).first()
+
+
+def get_project_by_name(db: Session, project_name: str) -> Project:
+    return db.query(Project).filter(Project.name == project_name).first()
 
 
 def get_projects(db: Session, skip: int = 0, limit: int = 100) -> List[Project]:

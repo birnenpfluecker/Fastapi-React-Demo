@@ -20,6 +20,7 @@ class Employee(BaseModel):
 class ProjectBase(BaseModel):
     name: str
     client: str
+    department_id: int
 
     class Config:
         from_attributes = True
