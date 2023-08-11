@@ -11,20 +11,27 @@ class Employee(BaseModel):
     first_name: str
     last_name: str
     age: int
+    department_id: int
 
     class Config:
         from_attributes = True
 
 
-class Project(BaseModel):
-    """Model for the projects which consists of the following fields:
-    - id: int
-    - name: str
-    - client: str
-    - department: Department"""
-    id: int
+class ProjectBase(BaseModel):
     name: str
     client: str
+
+    class Config:
+        from_attributes = True
+
+
+class ProjectCreate(ProjectBase):
+    # not necessary, could also use ProjectBase, but this way it is more explicit
+    pass
+
+
+class Project(ProjectBase):
+    id: int
 
     class Config:
         from_attributes = True

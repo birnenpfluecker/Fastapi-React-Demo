@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 
 from backend.database import Base
 
@@ -19,6 +20,8 @@ class Employee(Base):
     age = Column(Integer)
     department_id = Column(Integer, ForeignKey("departments.id"))
 
+    department = relationship("Department", back_populates="employees")
+
 
 class Project(Base):
     """Model for the projects which consists of the following fields:
@@ -32,6 +35,8 @@ class Project(Base):
     client = Column(String)
     department_id = Column(Integer, ForeignKey("departments.id"))
 
+    department = relationship("Department", back_populates="projects")
+
 
 class Department(Base):
     """Model for the departments which consists of the following fields:
@@ -42,5 +47,5 @@ class Department(Base):
     __tablename__ = "departments"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    employees = Column(String, ForeignKey("employees.email"))
-    projects = Column(Integer, ForeignKey("projects.id"))
+    employees = relationship("Employee", back_populates="department")
+    projects = relationship("Project", back_populates="department")
