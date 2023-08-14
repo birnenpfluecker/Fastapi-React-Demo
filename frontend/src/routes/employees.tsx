@@ -1,29 +1,15 @@
 import {
+  Button,
   Label,
   Table,
   TableCell,
   TableColumn,
   TableRow,
-} from "@ui5/webcomponents-react";
+} from '@ui5/webcomponents-react';
 
-import { Employee } from "../models";
-import { getEmployees } from "../http";
-import { useEffect, useState } from "react";
-
-// const json =
-//   '[{"email":"BMullinder@phoenixcontact.com","first_name":"Barbabra","last_name":"Mullinder","age":30,"department_id":1},{"email":"LBarthelemy@phoenixcontact.com","first_name":"Lammond","last_name":"Barthelemy","age":24,"department_id":8},{"email":"DParmiter@phoenixcontact.com","first_name":"Daphene","last_name":"Parmiter","age":26,"department_id":5},{"email":"DShew@phoenixcontact.com","first_name":"Dareen","last_name":"Shew","age":44,"department_id":5},{"email":"CDorie@phoenixcontact.com","first_name":"Colver","last_name":"Dorie","age":32,"department_id":6},{"email":"NFinder@phoenixcontact.com","first_name":"Norine","last_name":"Finder","age":53,"department_id":4}]';
-
-// const empObjects = JSON.parse(json);
-// const data: Array<Employee> = empObjects.map(
-//   (item: any) =>
-//     new Employee(
-//       item.email,
-//       item.first_name,
-//       item.last_name,
-//       item.age,
-//       item.department_id
-//     )
-// );
+import { Employee } from '../models';
+import { getEmployees } from '../http';
+import { useEffect, useState } from 'react';
 
 const rows = (data: Array<Employee>) => {
   return data.map((employee, index) => (
@@ -43,6 +29,11 @@ const rows = (data: Array<Employee>) => {
       <TableCell>
         <Label>{employee.department_id}</Label>
       </TableCell>
+      <TableCell>
+        <a href={`/employees/${employee.email}/`}>
+          <Button>details</Button>
+        </a>
+      </TableCell>
     </TableRow>
   ));
 };
@@ -50,26 +41,30 @@ const rows = (data: Array<Employee>) => {
 function EmployeeTable() {
   const [data, setData] = useState<Array<Employee>>([]);
 
+  // Function to fetch the data from the API and set it in the state
   const fetchData = async () => {
-    console.log("fetchData");
+    console.log('fetchData');
     try {
       const response = await getEmployees();
       setData(response.data); // Assuming the data is directly in the response object
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      console.error('Error fetching employees:', error);
     }
   };
 
+  //function to redirect to new employee
+  const openNew = () => {
+    window.location.href = '/employees/new/';
+  };
   // Use effect to make the API call when the component mounts
   useEffect(() => {
-    console.log("useEffect");
     fetchData();
   }, []);
 
   return (
-    <div style={{ overflow: "auto" }}>
+    <div style={{ overflow: 'auto' }}>
       <Table
-        className="table"
+        className='table'
         columns={
           <>
             <TableColumn>
@@ -87,6 +82,10 @@ function EmployeeTable() {
             <TableColumn>
               <Label>Department</Label>
             </TableColumn>
+            <Button design='Positive' onClick={openNew}>
+              New
+            </Button>
+            <TableColumn />
           </>
         }
       >
