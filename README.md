@@ -7,6 +7,7 @@ This repository contains a demo project. It is a simple web application that all
 The backend is written in python using the FastAPI framework. It uses a SQLite database to store the data. The database is created automatically when the backend is started for the first time. The backend can be installed and started by running the following commands.
 
 ### Installation
+Reqirements: Python 3.10, pip, virtualenv
 
 All commands are for a Mac/Linux system. For Windows these commands are similar but may differ slightly.
 First we create a virtual environment (you probably want to use a different environment than the one you normally use so you can delete it after the demo).
@@ -14,9 +15,10 @@ Create a new virtual environment and activate it. Navigate to the folder where y
 
 ```bash
 cd envs # or any other folder where you want to create the environment
-virtualenv -p python3.10.4 demo_env # create the environment, python version is given to prevent errors due to different python versions
+virtualenv demo_env # create the environment
 source demo_env/bin/activate # activate the environment, for windows use demo_env\Scripts\activate.bat
 ```
+
 
 Now we can install the backend. Navigate to the backend folder and run the following commands.
 
@@ -24,6 +26,7 @@ Now we can install the backend. Navigate to the backend folder and run the follo
 cd backend
 pip install -r requirements.txt
 ```
+If you have problems running the program, please check the python version you are using. This project was developed using python 3.10.4. You can check your python version by running `python --version` in the terminal. If you have a different version try installing Python 3.10.4.
 
 ### Start the backend
 
@@ -40,6 +43,7 @@ The backend is now running on http://127.0.0.1:8000. You can access the document
 The backend automatically imports the data from the given \*.csv files on the first start. If you want to import the data again you can delete the database file `PxC_demo_backend.db` and restart the backend, note that this will delete all changes to the data you made previously.
 
 ## Frontend
+Requirements: Node.js (developed with 20.5.1), npm (developed with 9.8.0), older versions might work but were not tested. 
 
 Check that the backend is running and then run the following commands to start the frontend.
 
