@@ -1,13 +1,18 @@
 import './App.css';
 import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom';
 import { ShellBar } from '@ui5/webcomponents-react';
-import Root from './routes/root';
+import Root from './routes/Root';
 import reactLogo from './assets/react.svg';
 import ErrorPage from './error';
-import EmployeeTable from './routes/employees';
-import EmployeeDetail from './routes/employee_detail';
-import { getEmployee } from './http';
-import EmployeeNew from './routes/employee_new';
+import EmployeeTable from './routes/Employees';
+import EmployeeDetail from './routes/EmployeeDetail';
+import EmployeeNew from './routes/EmployeeNew';
+import ProjectTable from './routes/Projects';
+import ProjectNew from './routes/ProjectNew';
+import ProjectDetail from './routes/ProjectDetail';
+import DepartmentTable from './routes/Departments';
+import DepartmentDetail from './routes/DepartmentDetail';
+import DepartmentNew from './routes/DepartmentNew';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +33,36 @@ const router = createBrowserRouter([
   {
     path: '/employees/new',
     element: <EmployeeNew />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/projects',
+    element: <ProjectTable />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/projects/:id',
+    element: <ProjectDetail />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/projects/new',
+    element: <ProjectNew />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/departments',
+    element: <DepartmentTable />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/departments/:id',
+    element: <DepartmentDetail />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/departments/new',
+    element: <DepartmentNew />,
     errorElement: <ErrorPage />,
   },
 ]);

@@ -13,27 +13,25 @@ import {
   Ui5CustomEvent,
 } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
-import { Employee } from '../models';
-import { createEmployee } from '../http';
+import { Project, ProjectCreate } from '../models';
+import { createProject } from '../http';
 import { useState } from 'react';
 import React from 'react';
 
-function EmployeeNew() {
+function ProjectNew() {
   //state of input fields
-  const [employeeData, setEmployee] = useState({
-    email: '',
-    first_name: '',
-    last_name: '',
-    age: '',
+  const [projectData, setProject] = useState({
+    id: '',
+    name: '',
+    client: '',
     department_id: '',
   });
 
   //refs for input fields
   const refs = {
-    email: React.createRef<InputDomRef>(),
-    first_name: React.createRef<InputDomRef>(),
-    last_name: React.createRef<InputDomRef>(),
-    age: React.createRef<InputDomRef>(),
+    id: React.createRef<InputDomRef>(),
+    name: React.createRef<InputDomRef>(),
+    client: React.createRef<InputDomRef>(),
     department_id: React.createRef<InputDomRef>(),
   };
 
@@ -50,13 +48,7 @@ function EmployeeNew() {
       e.stopPropagation(); //otherwise tab skips one input
       console.log('onKeyDown Enter or Tab');
 
-      const fieldsOrder = [
-        'email',
-        'first_name',
-        'last_name',
-        'age',
-        'department_id',
-      ];
+      const fieldsOrder = ['id', 'name', 'client', 'department_id'];
       const currentField = fieldsOrder.find(
         (field) => e.currentTarget === refs[field].current
       );
@@ -75,26 +67,24 @@ function EmployeeNew() {
   //update state of input fields
   const handleInputChange = (e: any, field: string) => {
     const updatedValue = e.target.value;
-    setEmployee((prev) => ({ ...prev, [field]: updatedValue }));
+    setProject((prev) => ({ ...prev, [field]: updatedValue }));
   };
 
-  //create employee and redirect to overview
+  //create project and redirect to overview
   const handleSubmit = async () => {
     console.log('handleSubmit');
 
     try {
-      const employee = new Employee(
-        employeeData.email,
-        employeeData.first_name,
-        employeeData.last_name,
-        Number(employeeData.age),
-        Number(employeeData.department_id)
+      const project = new ProjectCreate(
+        projectData.name,
+        projectData.client,
+        Number(projectData.department_id)
       );
-      console.log('employee', employee);
-      await createEmployee(employee);
-      window.location.href = '/employees/';
+      console.log('project', project);
+      await createProject(project);
+      window.location.href = '/projects/';
     } catch (error) {
-      console.error('Error creating employee:', error);
+      console.error('Error creating project:', error);
       <MessageBox
         actions={['OK']}
         onAfterOpen={function ka() {}}
@@ -103,7 +93,7 @@ function EmployeeNew() {
         onClose={function ka() {}}
         type='Confirm'
       >
-        Following error occurred during creation of employee. Please try again.
+        Following error occurred during creation of project. Please try again.
         For further assistance please contact your administrator.
       </MessageBox>;
     }
@@ -114,7 +104,7 @@ function EmployeeNew() {
       header={
         <CardHeader
           subtitleText='Please enter all necessary information'
-          titleText='Create a new employee'
+          titleText='Create a new project'
         />
       }
       style={{
@@ -124,49 +114,27 @@ function EmployeeNew() {
         textAlign: 'justify',
       }}
     >
-      <Form className='form' id='inputEmployee' onSubmit={onFormSubmit}>
+      <Form className='form' id='inputProject' onSubmit={onFormSubmit}>
         <List>
           <StandardListItem className='item'>
-            <Label>E-Mail</Label>
+            <Label>Name</Label>
             <Input
-              ref={refs.email}
-              className='input'
-              type='Email'
-              value={employeeData.email}
-              onInput={(e) => handleInputChange(e, 'email')}
-              onKeyDown={onKeyDown}
-            ></Input>
-          </StandardListItem>
-          <StandardListItem className='item'>
-            <Label>First Name</Label>
-            <Input
-              ref={refs.first_name}
+              ref={refs.name}
               className='input'
               type='Text'
-              value={employeeData.first_name}
-              onInput={(e) => handleInputChange(e, 'first_name')}
+              value={projectData.name}
+              onInput={(e) => handleInputChange(e, 'name')}
               onKeyDown={onKeyDown}
             />
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label>Last Name</Label>
+            <Label>Client</Label>
             <Input
-              ref={refs.last_name}
+              ref={refs.client}
               className='input'
               type='Text'
-              value={employeeData.last_name}
-              onInput={(e) => handleInputChange(e, 'last_name')}
-              onKeyDown={onKeyDown}
-            />
-          </StandardListItem>
-          <StandardListItem className='item'>
-            <Label>Age</Label>
-            <Input
-              ref={refs.age}
-              className='input'
-              type='Text'
-              value={employeeData.age}
-              onInput={(e) => handleInputChange(e, 'age')}
+              value={projectData.client}
+              onInput={(e) => handleInputChange(e, 'client')}
               onKeyDown={onKeyDown}
             />
           </StandardListItem>
@@ -176,13 +144,13 @@ function EmployeeNew() {
               ref={refs.department_id}
               className='input'
               type='Text'
-              value={employeeData.department_id}
+              value={projectData.department_id}
               onInput={(e) => handleInputChange(e, 'department_id')}
               onKeyDown={onKeyDown}
             />
           </StandardListItem>
           <StandardListItem>
-            <a href={`/employees/`}>
+            <a href={`/projects/`}>
               <Button className='button' design='Negative'>
                 Discard and back to overview
               </Button>
@@ -197,4 +165,4 @@ function EmployeeNew() {
   );
 }
 
-export default EmployeeNew;
+export default ProjectNew;

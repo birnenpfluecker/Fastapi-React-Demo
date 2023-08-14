@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import { Employee } from './models';
+import { DepartmentCreate, Employee, ProjectCreate } from './models';
 
 export const getEmployees = async () => {
   console.log('getEmployees');
@@ -31,12 +31,12 @@ export const getDepartment = async (id: number) => {
   return axios.get(`${API_BASE_URL}/departments/${id}`);
 };
 
-export const createDepartment = async (name: string) => {
-  return axios.post(`${API_BASE_URL}/departments/`, { name });
+export const createDepartment = async (name: DepartmentCreate) => {
+  return axios.post(`${API_BASE_URL}/departments/`, name);
 };
 
 export const editDepartment = async (id: number, name: string) => {
-  return axios.put(`${API_BASE_URL}/departments/${id}`, { name });
+  return axios.put(`${API_BASE_URL}/departments/${id}`, name);
 };
 
 export const deleteDepartment = async (id: number) => {
@@ -51,12 +51,12 @@ export const getProject = async (id: number) => {
   return axios.get(`${API_BASE_URL}/projects/${id}`);
 };
 
-export const createProject = async (name: string) => {
-  return axios.post(`${API_BASE_URL}/projects/`, { name });
+export const createProject = async (project: ProjectCreate) => {
+  return axios.post(`${API_BASE_URL}/projects/`, project);
 };
 
 export const editProject = async (id: number, name: string) => {
-  return axios.put(`${API_BASE_URL}/projects/${id}`, { name });
+  return axios.put(`${API_BASE_URL}/projects/${id}`, name);
 };
 
 export const deleteProject = async (id: number) => {
