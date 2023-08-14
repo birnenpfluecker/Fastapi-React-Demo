@@ -87,20 +87,15 @@ def get_number_of_projects_of_department(db: Session, department_id: int) -> int
         return 0
     return len(db_department.projects)
 
+
 def update_department(db: Session, department_id: int, department: schemas.Department) -> Department:
     print(str(department) + "\n" + str(department_id) + "\n")
     db_department = db.query(Department).filter(Department.id == department_id).first()
-    print('got right department')
     db_department.name = department.name
-    print('updated name')
     db_department.employees = department.employees
-    print('updated employees')
     db_department.projects = department.projects
-    print('updated projects')
     db.commit()
-    print('committed')
     db.refresh(db_department)
-    print('refreshed')
     return db_department
 
 

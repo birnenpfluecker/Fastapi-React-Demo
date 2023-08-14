@@ -40,8 +40,8 @@ class Project(ProjectBase):
 
 class DepartmentBase(BaseModel):
     name: str
-    employees: List[Employee]|None
-    projects: List[Project]|None
+    employees: List[Employee] | None
+    projects: List[Project] | None
 
     class Config:
         from_attributes = True
