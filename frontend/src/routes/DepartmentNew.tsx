@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   InputDomRef,
-  InputType,
   Label,
   List,
   MessageBox,
@@ -13,7 +12,7 @@ import {
   Ui5CustomEvent,
 } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
-import { Department, DepartmentCreate } from '../models';
+import { DepartmentCreate } from '../models';
 import { createDepartment } from '../http';
 import { useState } from 'react';
 import React from 'react';
@@ -35,7 +34,16 @@ function DepartmentNew() {
   }
 
   // This is a workaround for the missing tab and Enter key support in the UI5 Input component
-  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+  function onKeyDown(e: any, field: string) {
+    //prevent select behavio of spacebar
+    if (e.key === ' ') {
+      console.log('onKeyDown spacebar');
+      // Check for spacebar key
+      e.stopPropagation();
+      e.preventDefault();
+      setDepartment((prev) => ({ ...prev, [field]: prev[field] + ' ' }));
+    }
+    //got to next input with tab or enter
     if (e.key === 'Enter' || e.key === 'Tab') {
       e.preventDefault();
       e.stopPropagation(); //otherwise tab skips one input
@@ -111,7 +119,7 @@ function DepartmentNew() {
               type='Text'
               value={departmentData.name}
               onInput={(e) => handleInputChange(e, 'name')}
-              onKeyDown={onKeyDown}
+              onKeyDown={(e) => onKeyDown(e, 'name')}
             ></Input>
           </StandardListItem>
           <StandardListItem>

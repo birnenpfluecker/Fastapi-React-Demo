@@ -8,12 +8,19 @@ import {
   Label,
   List,
   MessageBox,
+  Option,
+  Select,
   StandardListItem,
   Ui5CustomEvent,
 } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
 import { Project, ProjectCreate } from '../models';
-import { createProject, getProject, updateProject } from '../http';
+import {
+  createProject,
+  getDepartments,
+  getProject,
+  updateProject,
+} from '../http';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { useParams } from 'react-router-dom';
@@ -21,6 +28,9 @@ import { useParams } from 'react-router-dom';
 function ProjectNew() {
   //get id from url
   const { id } = useParams<{ id: string }>();
+
+  // State to hold departments.
+  const [departments, setDepartments] = useState([]);
 
   //state of input fields
   const [projectData, setProject] = useState({
@@ -43,8 +53,16 @@ function ProjectNew() {
     e.preventDefault();
   }
 
-  //load project data if we have the id in the url meaning we are in updata
   useEffect(() => {
+    async function fetchDepartments() {
+      try {
+        const response = await getDepartments();
+        setDepartments(response.data);
+      } catch (error) {
+        console.error('Error fetching departments:', error);
+      }
+    }
+
     async function fetchProject() {
       try {
         const response = await getProject(Number(id));
@@ -55,14 +73,25 @@ function ProjectNew() {
       }
     }
 
+    // Fetch departments on component load
+    fetchDepartments();
+
+    //load project data if we have the id in the url meaning we are in updata
     if (id) {
       fetchProject();
     }
   }, [id]);
 
   // This is a workaround for the missing tab and Enter key support in the UI5 Input component
-  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    console.log('onKeyDown');
+  function onKeyDown(e: any, field: string) {
+    //prevent select behaviour of spacebar and add space to input
+    if (e.key === ' ') {
+      e.stopPropagation();
+      e.preventDefault();
+      setProject((prev) => ({ ...prev, [field]: prev[field] + ' ' }));
+    }
+
+    //got to next input with tab or enter
     if (e.key === 'Enter' || e.key === 'Tab') {
       e.preventDefault();
       e.stopPropagation(); //otherwise tab skips one input
@@ -84,7 +113,7 @@ function ProjectNew() {
     }
   }
 
-  //update state of input fields
+  // update state of input fields
   const handleInputChange = (e: any, field: string) => {
     const updatedValue = e.target.value;
     setProject((prev) => ({ ...prev, [field]: updatedValue }));
@@ -138,22 +167,22 @@ function ProjectNew() {
         width: '350px',
         margin: 'auto',
         borderRadius: '8rem',
-        textAlign: 'justify',
+        textalign: 'justify',
       }}
     >
       <Form className='form' id='inputProject' onSubmit={onFormSubmit}>
         <List>
-          <StandardListItem className='item'>
-            <Label>ID</Label>
-            {id && (
+          {id && (
+            <StandardListItem className='item'>
+              <Label>ID</Label>
               <Input
                 className='input'
                 type='Text'
                 value={projectData.id}
                 disabled={true}
               ></Input>
-            )}
-          </StandardListItem>
+            </StandardListItem>
+          )}
           <StandardListItem className='item'>
             <Label required={true}>Name</Label>
             <Input
@@ -162,7 +191,7 @@ function ProjectNew() {
               type='Text'
               value={projectData.name}
               onInput={(e) => handleInputChange(e, 'name')}
-              onKeyDown={onKeyDown}
+              onKeyDown={(e) => onKeyDown(e, 'name')}
             />
           </StandardListItem>
           <StandardListItem className='item'>
@@ -173,21 +202,28 @@ function ProjectNew() {
               type='Text'
               value={projectData.client}
               onInput={(e) => handleInputChange(e, 'client')}
-              onKeyDown={onKeyDown}
+              onKeyDown={(e) => onKeyDown(e, 'client')}
             />
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label required={true}>Department ID</Label>
-
-            <Input
-              ref={refs.department_id}
-              className='input'
-              type='Text'
+            <Label required={true}>Department</Label>
+            <Select
               value={projectData.department_id}
-              onInput={(e) => handleInputChange(e, 'department_id')}
-              onKeyDown={onKeyDown}
-              style={{ width: '100px' }}
-            />
+              onChange={(e) => {
+                // Get department_id from the selected option.
+                const selectedDeptId = e.detail.selectedOption.dataset.id;
+                handleInputChange(
+                  { target: { value: selectedDeptId } },
+                  'department_id'
+                );
+              }}
+            >
+              {departments.map((dept) => (
+                <Option key={dept.id} data-id={dept.id}>
+                  {dept.name}
+                </Option>
+              ))}
+            </Select>
           </StandardListItem>
           <StandardListItem>
             <a href={`/projects/`}>
