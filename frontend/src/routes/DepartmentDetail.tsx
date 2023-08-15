@@ -2,20 +2,49 @@ import {
   Button,
   Card,
   CardHeader,
+  Input,
   List,
   StandardListItem,
 } from '@ui5/webcomponents-react';
 import { Department, Employee, Project, RawDepartment } from '../models';
-import { getDepartment } from '../http';
+import { getDepartment, updateDepartment } from '../http';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import EmployeeLabel from '../utils/EmployeeLabel';
 import ProjectLabel from '../utils/ProjectLabel';
 
 function DepartmentDetail() {
   const { id } = useParams<{ id: string }>();
+  // State to store the data from the API
   const [department, setDepartment] = useState<Department | null>(null);
+  //State for edit mode
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  //State for edited department name
+  const [editedDepartmenName, setEditedDepartmentName] = useState<string>('');
+
+  //changes when clicking on edit
+  const handleEditClick = () => {
+    setEditedDepartmentName(department!.name);
+    setIsEditing(true);
+  };
+
+  //save edited changes
+  const handleSaveEdit = async () => {
+    console.log('handleSaveEdit');
+    // Update the state
+    try {
+      if (department) {
+        department.name = editedDepartmenName;
+        await updateDepartment(Number(id), department!);
+        setDepartment({ ...department, name: editedDepartmenName });
+      }
+    } catch (error) {
+      console.error('Error updating the department name:', error);
+      //normally here would be a message to the user, as this is onus code, I will just log it
+    }
+    setIsEditing(false);
+  };
 
   useEffect(() => {
     async function fetchDepartment() {
@@ -80,7 +109,18 @@ function DepartmentDetail() {
         <StandardListItem description={department.id.toString()}>
           Id
         </StandardListItem>
-        <StandardListItem description={department.name}>Name</StandardListItem>
+        {isEditing ? (
+          <>
+            <Input
+              value={editedDepartmenName}
+              onChange={(e: any) => setEditedDepartmentName(e.target.value)}
+            />
+          </>
+        ) : (
+          <StandardListItem description={department.name}>
+            Name
+          </StandardListItem>
+        )}
         <StandardListItem style={{ height: 'auto' }}>
           Employees <br />
           <EmployeeLabel employees={department.employees} />
@@ -90,9 +130,25 @@ function DepartmentDetail() {
           <ProjectLabel projects={department.projects} />
         </StandardListItem>
         <StandardListItem>
-          <a href={`/departments/`}>
-            <Button>Back to overview</Button>
-          </a>
+          {isEditing ? (
+            <>
+              <Button
+                onClick={() => {
+                  handleSaveEdit();
+                }}
+              >
+                Save
+              </Button>
+              <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+            </>
+          ) : (
+            <>
+              <a href={`/departments/`}>
+                <Button>Back to overview</Button>
+              </a>
+              <Button onClick={handleEditClick}>Edit</Button>
+            </>
+          )}
         </StandardListItem>
       </List>
     </Card>

@@ -92,8 +92,16 @@ def update_department(db: Session, department_id: int, department: schemas.Depar
     print(str(department) + "\n" + str(department_id) + "\n")
     db_department = db.query(Department).filter(Department.id == department_id).first()
     db_department.name = department.name
-    db_department.employees = department.employees
-    db_department.projects = department.projects
+    department_employees = []
+    for employee in department.employees:
+        db_employee = db.query(Employee).filter(Employee.email == employee.email).first()
+        department_employees.append(db_employee)
+    db_department.employees = department_employees
+    department_projects = []
+    for project in department.projects:
+        db_project = db.query(Project).filter(Project.id == project.id).first()
+        department_projects.append(db_project)
+    db_department.projects = department_projects
     db.commit()
     db.refresh(db_department)
     return db_department
