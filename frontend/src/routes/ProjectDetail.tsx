@@ -5,21 +5,27 @@ import {
   List,
   StandardListItem,
 } from '@ui5/webcomponents-react';
-import { Project } from '../models';
-import { getProject } from '../http';
+import { Department, Project } from '../models';
+import { getDepartments, getProject } from '../http';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 function ProjectDetail() {
+  //url param
   const { id } = useParams<{ id: string }>();
+  //proejct data
   const [project, setProject] = useState<Project | null>(null);
+  //State of departments
+  const [departments, setDepartments] = useState<Array<Department>>([]);
 
   useEffect(() => {
     async function fetchProject() {
       try {
         if (!id) return;
-        const response = await getProject(Number(id));
+        var response = await getProject(Number(id));
         setProject(response.data);
+        response = await getDepartments();
+        setDepartments(response.data);
       } catch (error) {
         console.error('Error fetching the project data:', error);
       }
@@ -29,6 +35,12 @@ function ProjectDetail() {
   }, [id]);
 
   if (!project) return <div>Loading...</div>;
+
+  //function to get department name from id
+  const getDepartmentName = (departmentId: number) => {
+    const department = departments.find((dep) => dep.id === departmentId);
+    return department ? department.name : 'Unknown Department';
+  };
 
   return (
     <Card
@@ -55,7 +67,9 @@ function ProjectDetail() {
         <StandardListItem description={project.client}>
           Last Name
         </StandardListItem>
-        <StandardListItem description={project.department_id.toString()}>
+        <StandardListItem
+          description={getDepartmentName(project.department_id)}
+        >
           Department
         </StandardListItem>
         <StandardListItem>

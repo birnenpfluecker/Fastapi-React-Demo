@@ -5,21 +5,27 @@ import {
   List,
   StandardListItem,
 } from '@ui5/webcomponents-react';
-import { Employee } from '../models';
-import { getEmployee } from '../http';
+import { Department, Employee } from '../models';
+import { getDepartments, getEmployee } from '../http';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 function EmployeeDetail() {
+  // url param
   const { email } = useParams<{ email: string }>();
+  //State of employee
   const [employee, setEmployee] = useState<Employee | null>(null);
+  //State of departments
+  const [departments, setDepartments] = useState<Array<Department>>([]);
 
   useEffect(() => {
     async function fetchEmployee() {
       try {
         if (!email) return;
-        const response = await getEmployee(email);
+        var response = await getEmployee(email);
         setEmployee(response.data);
+        response = await getDepartments();
+        setDepartments(response.data);
       } catch (error) {
         console.error('Error fetching the employee data:', error);
       }
@@ -29,6 +35,12 @@ function EmployeeDetail() {
   }, [email]);
 
   if (!employee) return <div>Loading...</div>;
+
+  //function to get department name from id
+  const getDepartmentName = (departmentId: number) => {
+    const department = departments.find((dep) => dep.id === departmentId);
+    return department ? department.name : 'Unknown Department';
+  };
 
   return (
     <Card
@@ -56,7 +68,9 @@ function EmployeeDetail() {
         <StandardListItem description={employee.age.toString()}>
           Age
         </StandardListItem>
-        <StandardListItem description={employee.department_id.toString()}>
+        <StandardListItem
+          description={getDepartmentName(employee.department_id)}
+        >
           Department
         </StandardListItem>
         <StandardListItem>
