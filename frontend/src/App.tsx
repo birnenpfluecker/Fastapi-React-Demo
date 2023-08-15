@@ -37,6 +37,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: '/employees/:email/update',
+    element: <EmployeeNew />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: '/projects',
     element: <ProjectTable />,
     errorElement: <ErrorPage />,

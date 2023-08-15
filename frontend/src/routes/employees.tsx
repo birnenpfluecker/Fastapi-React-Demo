@@ -80,6 +80,11 @@ function EmployeeTable() {
           </a>
         </TableCell>
         <TableCell>
+          <a href={`/employees/${employee.email}/update/`}>
+            <Button>Edit</Button>
+          </a>
+        </TableCell>
+        <TableCell>
           <Button
             design='Negative'
             onClick={() => promptDelete(employee.email)}
@@ -135,6 +140,7 @@ function EmployeeTable() {
             <TableColumn>
               <Label>Department</Label>
             </TableColumn>
+            <TableColumn />
             <TableColumn>
               Actions&emsp;
               <Button design='Positive' onClick={openNew}>

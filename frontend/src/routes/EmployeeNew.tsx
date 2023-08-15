@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   InputDomRef,
-  InputType,
   Label,
   List,
   MessageBox,
@@ -14,11 +13,15 @@ import {
 } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
 import { Employee } from '../models';
-import { createEmployee } from '../http';
-import { useState } from 'react';
+import { createEmployee, getEmployee, updateEmployee } from '../http';
+import { useEffect, useState } from 'react';
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 function EmployeeNew() {
+  //get id from url
+  const { email } = useParams<{ email: string }>();
+
   //state of input fields
   const [employeeData, setEmployee] = useState({
     email: '',
@@ -27,6 +30,27 @@ function EmployeeNew() {
     age: '',
     department_id: '',
   });
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  };
+
+  useEffect(() => {
+    async function fetchEmployee() {
+      try {
+        const response = await getEmployee(email!);
+        const fetchedEmployee = response.data;
+        setEmployee(fetchedEmployee);
+      } catch (error) {
+        console.error('Error fetching the employee data:', error);
+      }
+    }
+
+    if (isValidEmail(email!)) {
+      fetchEmployee();
+    }
+  }, [email]);
 
   //refs for input fields
   const refs = {
@@ -89,20 +113,17 @@ function EmployeeNew() {
         Number(employeeData.department_id)
       );
       console.log('employee', employee);
-      await createEmployee(employee);
+      if (!email) {
+        await createEmployee(employee);
+      } else {
+        await updateEmployee(employee);
+      }
       window.location.href = '/employees/';
     } catch (error) {
       console.error('Error creating employee:', error);
-      <MessageBox
-        actions={['OK']}
-        onAfterOpen={function ka() {}}
-        onBeforeClose={function ka() {}}
-        onBeforeOpen={function ka() {}}
-        onClose={function ka() {}}
-        type='Confirm'
-      >
-        Following error occurred during creation of employee. Please try again.
-        For further assistance please contact your administrator.
+      <MessageBox actions={['OK']} type='Confirm'>
+        An error occurred during creation of employee. Please try again. For
+        further assistance please contact your administrator.
       </MessageBox>;
     }
   };
@@ -133,6 +154,7 @@ function EmployeeNew() {
               value={employeeData.email}
               onInput={(e) => handleInputChange(e, 'email')}
               onKeyDown={onKeyDown}
+              disabled={!!employeeData.email}
             ></Input>
           </StandardListItem>
           <StandardListItem className='item'>
