@@ -19,8 +19,10 @@ export const editEmployee = async (employee: Employee) => {
   return axios.put(`${API_BASE_URL}/employees/${employee.email}`, employee);
 };
 
-export const deleteEmployee = async (employee: Employee) => {
-  return axios.delete(`${API_BASE_URL}/employees/${employee.email}`);
+export const deleteEmployee = async (employeeMail: string) => {
+  console.log('deleteEmployee');
+  console.log(`${API_BASE_URL}/employees/${employeeMail}/`);
+  return axios.delete(`${API_BASE_URL}/employees/${employeeMail}/`);
 };
 
 export const getDepartments = async () => {

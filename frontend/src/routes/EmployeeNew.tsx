@@ -37,7 +37,7 @@ function EmployeeNew() {
     department_id: React.createRef<InputDomRef>(),
   };
 
-  //preventin the form from submitting on hitting enter, submit is handled by submit button
+  //preventing the form from submitting on hitting enter, submit is handled by submit button
   function onFormSubmit(e: Ui5CustomEvent<HTMLFormElement>) {
     e.preventDefault();
   }
