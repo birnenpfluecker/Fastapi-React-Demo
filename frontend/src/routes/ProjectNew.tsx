@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   InputDomRef,
-  InputType,
   Label,
   List,
   MessageBox,
@@ -14,11 +13,15 @@ import {
 } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
 import { Project, ProjectCreate } from '../models';
-import { createProject } from '../http';
-import { useState } from 'react';
+import { createProject, getProject, updateProject } from '../http';
+import { useEffect, useState } from 'react';
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 function ProjectNew() {
+  //get id from url
+  const { id } = useParams<{ id: string }>();
+
   //state of input fields
   const [projectData, setProject] = useState({
     id: '',
@@ -39,6 +42,23 @@ function ProjectNew() {
   function onFormSubmit(e: Ui5CustomEvent<HTMLFormElement>) {
     e.preventDefault();
   }
+
+  //load project data if we have the id in the url meaning we are in updata
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const response = await getProject(Number(id));
+        const fetchedProject = response.data;
+        setProject(fetchedProject);
+      } catch (error) {
+        console.error('Error fetching the project data:', error);
+      }
+    }
+
+    if (id) {
+      fetchProject();
+    }
+  }, [id]);
 
   // This is a workaround for the missing tab and Enter key support in the UI5 Input component
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -70,18 +90,25 @@ function ProjectNew() {
     setProject((prev) => ({ ...prev, [field]: updatedValue }));
   };
 
-  //create project and redirect to overview
+  //create or update project and redirect to overview
   const handleSubmit = async () => {
-    console.log('handleSubmit');
-
     try {
-      const project = new ProjectCreate(
-        projectData.name,
-        projectData.client,
-        Number(projectData.department_id)
-      );
-      console.log('project', project);
-      await createProject(project);
+      if (id) {
+        const project = new Project(
+          Number(projectData.id),
+          projectData.name,
+          projectData.client,
+          Number(projectData.department_id)
+        );
+        await updateProject(Number(id), project);
+      } else {
+        const project = new ProjectCreate(
+          projectData.name,
+          projectData.client,
+          Number(projectData.department_id)
+        );
+        await createProject(project);
+      }
       window.location.href = '/projects/';
     } catch (error) {
       console.error('Error creating project:', error);
@@ -93,8 +120,8 @@ function ProjectNew() {
         onClose={function ka() {}}
         type='Confirm'
       >
-        Following error occurred during creation of project. Please try again.
-        For further assistance please contact your administrator.
+        An error occurred during creation of project. Please try again. For
+        further assistance please contact your administrator.
       </MessageBox>;
     }
   };
@@ -104,7 +131,7 @@ function ProjectNew() {
       header={
         <CardHeader
           subtitleText='Please enter all necessary information'
-          titleText='Create a new project'
+          titleText={!!id ? 'Update project' : 'Create a new project'}
         />
       }
       style={{
@@ -117,7 +144,18 @@ function ProjectNew() {
       <Form className='form' id='inputProject' onSubmit={onFormSubmit}>
         <List>
           <StandardListItem className='item'>
-            <Label>Name</Label>
+            <Label>ID</Label>
+            {id && (
+              <Input
+                className='input'
+                type='Text'
+                value={projectData.id}
+                disabled={true}
+              ></Input>
+            )}
+          </StandardListItem>
+          <StandardListItem className='item'>
+            <Label required={true}>Name</Label>
             <Input
               ref={refs.name}
               className='input'
@@ -128,7 +166,7 @@ function ProjectNew() {
             />
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label>Client</Label>
+            <Label required={true}>Client</Label>
             <Input
               ref={refs.client}
               className='input'
@@ -139,7 +177,8 @@ function ProjectNew() {
             />
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label>Department ID</Label>
+            <Label required={true}>Department ID</Label>
+
             <Input
               ref={refs.department_id}
               className='input'
@@ -147,6 +186,7 @@ function ProjectNew() {
               value={projectData.department_id}
               onInput={(e) => handleInputChange(e, 'department_id')}
               onKeyDown={onKeyDown}
+              style={{ width: '100px' }}
             />
           </StandardListItem>
           <StandardListItem>

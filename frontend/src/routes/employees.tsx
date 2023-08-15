@@ -1,22 +1,24 @@
 import {
   Bar,
   Button,
-  ButtonDomRef,
   Dialog,
   Label,
   Table,
   TableCell,
   TableColumn,
   TableRow,
+  Title,
 } from '@ui5/webcomponents-react';
 
-import { Employee } from '../models';
-import { deleteEmployee, getEmployees } from '../http';
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { Department, Employee } from '../models';
+import { deleteEmployee, getDepartments, getEmployees } from '../http';
+import { useEffect, useState } from 'react';
 
 function EmployeeTable() {
   // State to store the data from the API
   const [data, setData] = useState<Array<Employee>>([]);
+  //State of departments
+  const [departments, setDepartments] = useState<Array<Department>>([]);
   // state for delete confirmation
   const [emailToDelete, setEmailToDelete] = useState<string | null>(null);
   // state for dialog
@@ -38,11 +40,19 @@ function EmployeeTable() {
   const fetchData = async () => {
     console.log('fetchData');
     try {
-      const response = await getEmployees();
-      setData(response.data); // Assuming the data is directly in the response object
+      var response = await getEmployees();
+      setData(response.data);
+      response = await getDepartments();
+      setDepartments(response.data);
     } catch (error) {
       console.error('Error fetching employees:', error);
     }
+  };
+
+  //function to get department name from id
+  const getDepartmentName = (departmentId: number) => {
+    const department = departments.find((dep) => dep.id === departmentId);
+    return department ? department.name : 'Unknown Department';
   };
 
   //function to redirect to new employee
@@ -72,7 +82,7 @@ function EmployeeTable() {
           <Label>{employee.age}</Label>
         </TableCell>
         <TableCell>
-          <Label>{employee.department_id}</Label>
+          <Label>{getDepartmentName(employee.department_id)}</Label>
         </TableCell>
         <TableCell>
           <a href={`/employees/${employee.email}/`}>
@@ -121,6 +131,7 @@ function EmployeeTable() {
           Are you sure you want to delete this employee?
         </Dialog>
       )}
+      <Title level='H1'>Employees</Title>
       <Table
         className='table'
         columns={

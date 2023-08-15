@@ -57,6 +57,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: '/projects/:id/update',
+    element: <ProjectNew />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: '/departments',
     element: <DepartmentTable />,
     errorElement: <ErrorPage />,
@@ -89,7 +94,6 @@ const menuClicked = (e: any) => {
     default:
       window.location.href = '/';
       break;
-      window.location.href = '/departments';
   }
 };
 

@@ -7,15 +7,18 @@ import {
   TableCell,
   TableColumn,
   TableRow,
+  Title,
 } from '@ui5/webcomponents-react';
 
-import { Project } from '../models';
-import { deleteProject, getProjects } from '../http';
+import { Department, Project } from '../models';
+import { deleteProject, getDepartments, getProjects } from '../http';
 import { useEffect, useState } from 'react';
 
 function ProjectTable() {
   // State to store the data from the API
   const [data, setData] = useState<Array<Project>>([]);
+  //State of departments
+  const [departments, setDepartments] = useState<Array<Department>>([]);
   // State for delete confirmation
   const [idToDelete, setIdToDelete] = useState<number | null>(null);
   // State for dialog
@@ -37,11 +40,19 @@ function ProjectTable() {
   const fetchData = async () => {
     console.log('fetchData');
     try {
-      const response = await getProjects();
-      setData(response.data); // Assuming the data is directly in the response object
+      var response = await getProjects();
+      setData(response.data);
+      response = await getDepartments();
+      setDepartments(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
+  };
+
+  //function to get department name from id
+  const getDepartmentName = (departmentId: number) => {
+    const department = departments.find((dep) => dep.id === departmentId);
+    return department ? department.name : 'Unknown Department';
   };
 
   //function to redirect to new employee
@@ -68,11 +79,16 @@ function ProjectTable() {
           <Label>{project.client}</Label>
         </TableCell>
         <TableCell>
-          <Label>{project.department_id}</Label>
+          <Label>{getDepartmentName(project.department_id)}</Label>
         </TableCell>
         <TableCell>
           <a href={`/projects/${project.id}/`}>
             <Button>details</Button>
+          </a>
+        </TableCell>
+        <TableCell>
+          <a href={`/projects/${project.id}/update/`}>
+            <Button>Edit</Button>
           </a>
         </TableCell>
         <TableCell>
@@ -109,6 +125,7 @@ function ProjectTable() {
           Are you sure you want to delete this employee?
         </Dialog>
       )}
+      <Title level='H1'>Projects</Title>
       <Table
         className='table'
         columns={
@@ -125,6 +142,7 @@ function ProjectTable() {
             <TableColumn>
               <Label>Department</Label>
             </TableColumn>
+            <TableColumn />
             <TableColumn>
               Actions&emsp;
               <Button design='Positive' onClick={openNew}>

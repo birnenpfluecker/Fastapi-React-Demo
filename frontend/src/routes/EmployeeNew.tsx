@@ -36,6 +36,7 @@ function EmployeeNew() {
     return emailRegex.test(email);
   };
 
+  //load employee data if we have the email in the url meaning we are in updata
   useEffect(() => {
     async function fetchEmployee() {
       try {
@@ -100,7 +101,7 @@ function EmployeeNew() {
     setEmployee((prev) => ({ ...prev, [field]: updatedValue }));
   };
 
-  //create employee and redirect to overview
+  //create or update employee and redirect to overview
   const handleSubmit = async () => {
     console.log('handleSubmit');
 
@@ -133,7 +134,7 @@ function EmployeeNew() {
       header={
         <CardHeader
           subtitleText='Please enter all necessary information'
-          titleText='Create a new employee'
+          titleText={!!email ? 'Update employee' : 'Create a new employee'}
         />
       }
       style={{
@@ -146,7 +147,7 @@ function EmployeeNew() {
       <Form className='form' id='inputEmployee' onSubmit={onFormSubmit}>
         <List>
           <StandardListItem className='item'>
-            <Label>E-Mail</Label>
+            <Label required={true}>E-Mail</Label>
             <Input
               ref={refs.email}
               className='input'
@@ -158,7 +159,7 @@ function EmployeeNew() {
             ></Input>
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label>First Name</Label>
+            <Label required={true}>First Name</Label>
             <Input
               ref={refs.first_name}
               className='input'
@@ -169,7 +170,7 @@ function EmployeeNew() {
             />
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label>Last Name</Label>
+            <Label required={true}>Last Name</Label>
             <Input
               ref={refs.last_name}
               className='input'
@@ -180,7 +181,7 @@ function EmployeeNew() {
             />
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label>Age</Label>
+            <Label required={true}>Age</Label>
             <Input
               ref={refs.age}
               className='input'
@@ -191,7 +192,7 @@ function EmployeeNew() {
             />
           </StandardListItem>
           <StandardListItem className='item'>
-            <Label>Department ID</Label>
+            <Label required={true}>Department ID</Label>
             <Input
               ref={refs.department_id}
               className='input'

@@ -104,7 +104,7 @@ function DepartmentNew() {
       <Form className='form' id='inputDepartment' onSubmit={onFormSubmit}>
         <List>
           <StandardListItem className='item'>
-            <Label>Name</Label>
+            <Label required={true}>Name</Label>
             <Input
               ref={refs.name}
               className='input'

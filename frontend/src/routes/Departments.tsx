@@ -7,6 +7,7 @@ import {
   TableCell,
   TableColumn,
   TableRow,
+  Title,
 } from '@ui5/webcomponents-react';
 
 import { Department, Employee, Project, RawDepartment } from '../models';
@@ -137,6 +138,7 @@ function DepartmentTable() {
           Are you sure you want to delete this department?
         </Dialog>
       )}
+      <Title level='H1'>Departments</Title>
       <Table
         className='table'
         columns={
