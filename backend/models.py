@@ -47,5 +47,5 @@ class Department(Base):
     __tablename__ = "departments"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    employees = relationship("Employee", back_populates="department")
-    projects = relationship("Project", back_populates="department")
+    employees = relationship("Employee", back_populates="department", cascade="all, delete")
+    projects = relationship("Project", back_populates="department", cascade="all, delete")
