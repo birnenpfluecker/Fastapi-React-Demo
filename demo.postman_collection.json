@@ -1,0 +1,538 @@
+{
+	"info": {
+		"_postman_id": "9b74e5f6-d74d-49bd-9299-6c0f931d5bd4",
+		"name": "PxC Bewerbung",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "employee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"skordisch@phoenixcontact.com\",\n\t\"first_name\": \"Steffen\",\n\t\"last_name\": \"Kordisch\",\n\t\"age\": 27,\n\t\"department_id\":4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/employees/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"employees",
+						""
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"S4 Help Desk\", \"client\": \"E Mob\", \"department_id\": 1 }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/projects/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"projects",
+						""
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "projects",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"skordisch@phoenixcontact.com\",\n\t\"first_name\": \"Steffen\",\n\t\"last_name\": \"Kordisch\",\n\t\"age\": 27,\n\t\"department_id\":4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/projects/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"projects",
+						""
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "project",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"skordisch@phoenixcontact.com\",\n\t\"first_name\": \"Steffen\",\n\t\"last_name\": \"Kordisch\",\n\t\"age\": 27,\n\t\"department_id\":4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/projects/6/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"projects",
+						"6",
+						""
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "employee",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"smuessemeier@phoenixcontact.com\",\n\t\"first_name\": \"Stephan\",\n\t\"last_name\": \"Müssemeier\",\n\t\"age\": 42,\n\t\"department_id\":2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/employees/:mail/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"employees",
+						":mail",
+						""
+					],
+					"variable": [
+						{
+							"key": "mail",
+							"value": "smuessemeier@phoenixcontact.com"
+						}
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "employee",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"smuessemeier@phoenixcontact.com\",\n\t\"first_name\": \"Stephan\",\n\t\"last_name\": \"Müssemeier\",\n\t\"age\": 42,\n\t\"department_id\":2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/employees/:mail/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"employees",
+						":mail",
+						""
+					],
+					"variable": [
+						{
+							"key": "mail",
+							"value": "smuessemeier@phoenixcontact.com"
+						}
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "employees",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Production\",\n\t\"employees\": [],\n\t\"projects\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/employees/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"employees",
+						""
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "employee",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Production\",\n\t\"employees\": [],\n\t\"projects\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/employees/:mail/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"employees",
+						":mail",
+						""
+					],
+					"variable": [
+						{
+							"key": "mail",
+							"value": "smuessemeier@phoenixcontact.com"
+						}
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "department",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Production\",\n\t\"employees\": [],\n\t\"projects\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/departments/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"departments",
+						""
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "departments",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Sales\",\n\t\"employees\": [],\n\t\"projects\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/departments/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"departments",
+						""
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "department",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/departments/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"departments",
+						"2"
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "department",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 2,\n\t\"name\": \"IT Management\",\n\t\"employees\": [],\n\t\"projects\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/departments/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"departments",
+						"2"
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "department",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1,\n\t\"name\": \"IT Management\",\n\t\"employees\": [],\n\t\"projects\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/departments/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"departments",
+						"1"
+					]
+				},
+				"description": "create employee"
+			},
+			"response": []
+		},
+		{
+			"name": "Average age of department",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/statistics/average_age_per_department/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"statistics",
+						"average_age_per_department",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employees per department",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/statistics/employees_per_department/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"statistics",
+						"employees_per_department",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Number of projects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/statistics/number_of_projects_per_department/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"statistics",
+						"number_of_projects_per_department",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
